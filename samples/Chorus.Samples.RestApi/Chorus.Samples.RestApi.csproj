@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Chorus.CQRS\Chorus.CQRS.csproj" />
+    <ProjectReference Include="..\..\src\Chorus.DistributedLog.InMemory\Chorus.DistributedLog.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Chorus.Messaging\Chorus.Messaging.csproj" />
+  </ItemGroup>
+
+</Project>

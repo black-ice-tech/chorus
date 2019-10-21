@@ -9,6 +9,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chorus.DistributedLog\Chorus.DistributedLog.csproj" />
+    <ProjectReference Include="..\Chorus.Messaging\Chorus.Messaging.csproj" />
   </ItemGroup>
 
 </Project>
