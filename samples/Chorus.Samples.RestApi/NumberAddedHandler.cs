@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chorus.Samples.RestApi
 {
-    public class MyEvent : IEvent
+    public class NumberAdded : IEvent
     {
         public Guid Id { get; set; }
 
@@ -17,22 +17,24 @@ namespace Chorus.Samples.RestApi
         public int Version { get; set; }
 
         public string MyString { get; set; }
+
+        public int Num { get; set; }
     }
 
-    public class MyEventHandler : IEventHandler<MyEvent>
+    public class NumberAddedHandler : IEventHandler<NumberAdded>
     {
-        private readonly ILogger<MyEventHandler> _logger;
+        private readonly ILogger<NumberAddedHandler> _logger;
 
-        public Predicate<MyEvent> OnlyHandleIf => evt => evt.MyString == "papa murphy's";
+        public Predicate<NumberAdded> OnlyHandleIf => evt => evt.MyString == "papa murphy's";
 
-        public MyEventHandler(ILogger<MyEventHandler> logger)
+        public NumberAddedHandler(ILogger<NumberAddedHandler> logger)
         {
             _logger = logger;
         }
 
-        public Task HandleAsync(MyEvent evt)
+        public Task HandleAsync(NumberAdded evt)
         {
-            _logger.LogInformation($"Handling event: {evt.GetType()}");
+            _logger.LogInformation($"Handling event: {evt.Num}");
             return Task.CompletedTask;
         }
     }

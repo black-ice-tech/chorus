@@ -1,6 +1,7 @@
 ﻿using Chorus.Core;
 using Chorus.DistributedLog.Abstractions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Chorus.DistributedLog.InMemory
 {

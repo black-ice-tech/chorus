@@ -27,7 +27,7 @@ namespace Chorus.Samples.RestApi
         {
             services.AddControllers();
 
-            services.AddInMemoryDistributedLog(typeof(MyEventHandler));
+            services.AddInMemoryDistributedLog(typeof(NumberAddedHandler));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

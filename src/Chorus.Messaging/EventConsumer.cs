@@ -27,11 +27,16 @@ namespace Chorus.Messaging
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogError("Starting worker...");
             var topic = _topicNamingConvention.GetTopicName<TEvent>();
-
+            
             while (!stoppingToken.IsCancellationRequested)
             {
                 var consumer = (IStreamConsumer)_serviceProvider.GetService(typeof(IStreamConsumer));
+
+                // For some reason, without adding another "await" statement, the below async stream blocks
+                // the main thread and won't start up the application. This is a workaround
+                await Task.Delay(10);
 
                 await foreach (var msg in consumer.ConsumeAsync(topic))
                 {
@@ -39,6 +44,8 @@ namespace Chorus.Messaging
                     var handler = (IEventHandler<TEvent>)_serviceProvider.GetService(typeof(IEventHandler<TEvent>));
                     await handler.HandleAsync(obj);
                 }
+
+                var abc = 123;
             }
         }
     }
