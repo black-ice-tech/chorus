@@ -27,7 +27,7 @@ namespace Chorus.Messaging
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogError("Starting worker...");
+            _logger.LogInformation("Starting event consumer for type {EventType}", typeof(TEvent).Name);
             var topic = _topicNamingConvention.GetTopicName<TEvent>();
             
             while (!stoppingToken.IsCancellationRequested)
@@ -43,9 +43,11 @@ namespace Chorus.Messaging
                     var obj = JsonConvert.DeserializeObject<TEvent>(Encoding.UTF8.GetString(msg));
                     var handler = (IEventHandler<TEvent>)_serviceProvider.GetService(typeof(IEventHandler<TEvent>));
                     await handler.HandleAsync(obj);
-                }
 
-                var abc = 123;
+                    var projector = (IEventProjector<TEvent>)_serviceProvider.GetService(typeof(IEventProjector<TEvent>));
+                    
+                    await projector.ApplyAsync(obj);
+                }
             }
         }
     }

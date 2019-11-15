@@ -1,5 +1,6 @@
 ﻿using Chorus.DistributedLog.Abstractions;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Chorus.DistributedLog.InMemory
 {
     public class InMemoryDistributedLog : IDistributedLog
     {
-        private readonly Dictionary<string, List<byte[]>> _streams = new Dictionary<string, List<byte[]>>();
+        private readonly ConcurrentDictionary<string, List<byte[]>> _streams = new ConcurrentDictionary<string, List<byte[]>>();
 
         public Task AppendAsync(string streamName, byte[] payload)
         {

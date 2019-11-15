@@ -4,6 +4,8 @@ using Chorus.DistributedLog.Abstractions;
 using Chorus.DistributedLog.InMemory.Extensions;
 using Chorus.Messaging;
 using Chorus.Messaging.Abstractions;
+using Chorus.Samples.RestApi.Handlers;
+using Chorus.Samples.RestApi.Projectors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +29,29 @@ namespace Chorus.Samples.RestApi
         {
             services.AddControllers();
 
-            services.AddInMemoryDistributedLog(typeof(NumberAddedHandler));
+            services.AddInMemoryDistributedLog();
+            services.AddHostedService<EventConsumer<NumberAdded>>();
+            services.AddHostedService<EventConsumer<NumberMultiplied>>();
+            services.AddHostedService<EventConsumer<NumberSubtracted>>();
+
+            services.AddHostedService<EventConsumer<PolicyStarted>>();
+            services.AddHostedService<EventConsumer<PolicyIssued>>();
+            services.AddHostedService<EventConsumer<PolicyEnded>>();
+            services.AddHostedService<EventConsumer<PolicyCancelled>>();
+
+            services.AddTransient(typeof(IEventHandler<>), typeof(DemoEventHandler<>));
+            //services.AddTransient<IEventHandler<NumberAdded>, NumberAddedHandler>();
+            //services.AddTransient<IEventHandler<NumberMultiplied>, NumberMultipliedHandler>();
+            //services.AddTransient<IEventHandler<NumberSubtracted>, NumberSubtractedHandler>();
+
+            services.AddTransient<IEventProjector<NumberAdded>, NumberInMemoryStoreProjector>();
+            services.AddTransient<IEventProjector<NumberMultiplied>, NumberInMemoryStoreProjector>();
+            services.AddTransient<IEventProjector<NumberSubtracted>, NumberInMemoryStoreProjector>();
+
+            services.AddTransient<IEventProjector<PolicyStarted>, PolicyInMemoryStoreProjector>();
+            services.AddTransient<IEventProjector<PolicyIssued>, PolicyInMemoryStoreProjector>();
+            services.AddTransient<IEventProjector<PolicyEnded>, PolicyInMemoryStoreProjector>();
+            services.AddTransient<IEventProjector<PolicyCancelled>, PolicyInMemoryStoreProjector>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

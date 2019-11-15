@@ -1,4 +1,5 @@
-﻿using Chorus.DistributedLog.Abstractions;
+﻿using Chorus.CQRS;
+using Chorus.DistributedLog.Abstractions;
 using Chorus.Messaging;
 using Chorus.Messaging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,29 @@ namespace Chorus.DistributedLog.InMemory.Extensions
             services.AddSingleton<IDistributedLog, InMemoryDistributedLog>();
             services.AddTransient<IStreamConsumer, InMemoryStreamConsumer>();
             services.AddSingleton<ITopicNamingConvention, KebabCaseTopicNamingConvention>();
-            services.AddEventHandlersAndConsumers(markerTypes);
+            //services.AddEventHandlersAndConsumers(markerTypes);
+            //services.AddProjectors(markerTypes);
+        }
+
+        private static void AddProjectors(this IServiceCollection services, params Type[] markerTypes)
+        {
+            var projectors = new List<Type>();
+            foreach (var type in markerTypes)
+            {
+                projectors.AddRange(GetAllTypesImplementingOpenGenericType(typeof(IEventProjector<>), type.Assembly));
+            }
+
+            foreach (var projectorType in projectors)
+            {
+                var interfaces = projectorType.GetInterfaces()
+                    .Where(t => t.GetGenericTypeDefinition() == typeof(IEventProjector<>))
+                    .ToList();
+
+                foreach (var interfaceType in interfaces)
+                {
+                    services.AddTransient(interfaceType, projectorType);
+                }
+            }
         }
 
         private static void AddEventHandlersAndConsumers(this IServiceCollection services, params Type[] markerTypes)
@@ -29,14 +52,13 @@ namespace Chorus.DistributedLog.InMemory.Extensions
 
             foreach (var handlerType in eventHandlers)
             {
-                var interfaces = handlerType.GetInterfaces().Where(t => t.GetGenericTypeDefinition() == typeof(IEventHandler<>)).ToList();
-
-                foreach (var interfaceType in interfaces)
+                if (!handlerType.IsAbstract)
                 {
-                    services.AddTransient(interfaceType, handlerType);
-
-                    var evtType = interfaceType.GetGenericArguments()[0];
+                    var evtType = handlerType.BaseType.GetGenericArguments()[0];
                     var consumerType = typeof(EventConsumer<>).MakeGenericType(evtType);
+                    var @interface = typeof(IEventHandler<>).MakeGenericType(evtType);
+
+                    services.AddTransient(@interface, handlerType);
 
                     // TODO - there's got to be a better way to do this
                     var method = typeof(ServiceCollectionHostedServiceExtensions).GetMethods()
@@ -46,6 +68,27 @@ namespace Chorus.DistributedLog.InMemory.Extensions
 
                     method.Invoke(null, new object[] { services });
                 }
+
+                //handlerType.GetInterfaces()
+                //.Where(t => t.GetGenericTypeDefinition() == typeof(IEventHandler<>))
+                //.Where(t => !t.IsAbstract)
+                //.ToList();
+
+                //foreach (var interfaceType in interfaces)
+                //{
+                //    services.AddTransient(interfaceType, handlerType);
+
+                //    var evtType = interfaceType.GetGenericArguments()[0];
+                //    var consumerType = typeof(EventConsumer<>).MakeGenericType(evtType);
+
+                //    // TODO - there's got to be a better way to do this
+                //    var method = typeof(ServiceCollectionHostedServiceExtensions).GetMethods()
+                //        .Where(m => m.IsStatic && m.IsPublic)
+                //        .First(m => m.Name == "AddHostedService")
+                //        .MakeGenericMethod(consumerType);
+
+                //    method.Invoke(null, new object[] { services });
+                // }
             }
         }
 
