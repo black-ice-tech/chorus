@@ -12,13 +12,12 @@ namespace Chorus.DistributedLog.InMemory.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddInMemoryDistributedLog(this IServiceCollection services, params Type[] markerTypes)
+        public static IServiceCollection AddInMemoryDistributedLog(this IServiceCollection services)
         {
             services.AddSingleton<IDistributedLog, InMemoryDistributedLog>();
             services.AddTransient<IStreamConsumer, InMemoryStreamConsumer>();
             services.AddSingleton<ITopicNamingConvention, KebabCaseTopicNamingConvention>();
-            //services.AddEventHandlersAndConsumers(markerTypes);
-            //services.AddProjectors(markerTypes);
+            return services;
         }
 
         private static void AddProjectors(this IServiceCollection services, params Type[] markerTypes)
@@ -26,13 +25,13 @@ namespace Chorus.DistributedLog.InMemory.Extensions
             var projectors = new List<Type>();
             foreach (var type in markerTypes)
             {
-                projectors.AddRange(GetAllTypesImplementingOpenGenericType(typeof(IEventProjector<>), type.Assembly));
+                projectors.AddRange(GetAllTypesImplementingOpenGenericType(typeof(IEventApplier<>), type.Assembly));
             }
 
             foreach (var projectorType in projectors)
             {
                 var interfaces = projectorType.GetInterfaces()
-                    .Where(t => t.GetGenericTypeDefinition() == typeof(IEventProjector<>))
+                    .Where(t => t.GetGenericTypeDefinition() == typeof(IEventApplier<>))
                     .ToList();
 
                 foreach (var interfaceType in interfaces)

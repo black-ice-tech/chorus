@@ -1,15 +1,13 @@
 ﻿using Chorus.CQRS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Chorus.Samples.RestApi.Handlers;
 using System.Threading.Tasks;
 
-namespace Chorus.Samples.RestApi
+namespace Chorus.Samples.RestApi.Appliers
 {
-    public class NumberInMemoryStoreProjector : 
-        IEventProjector<NumberAdded>,
-        IEventProjector<NumberMultiplied>,
-        IEventProjector<NumberSubtracted>
+    public class CurrentNumberInMemoryStoreApplier :
+        IEventApplier<NumberAdded>,
+        IEventApplier<NumberMultiplied>,
+        IEventApplier<NumberSubtracted>
     {
         public Task ApplyAsync(NumberAdded evt)
         {

@@ -43,10 +43,6 @@ namespace Chorus.Messaging
                     var obj = JsonConvert.DeserializeObject<TEvent>(Encoding.UTF8.GetString(msg));
                     var handler = (IEventHandler<TEvent>)_serviceProvider.GetService(typeof(IEventHandler<TEvent>));
                     await handler.HandleAsync(obj);
-
-                    var projector = (IEventProjector<TEvent>)_serviceProvider.GetService(typeof(IEventProjector<TEvent>));
-                    
-                    await projector.ApplyAsync(obj);
                 }
             }
         }

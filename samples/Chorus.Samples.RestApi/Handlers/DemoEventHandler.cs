@@ -1,11 +1,10 @@
 ﻿using Chorus.CQRS;
 using Chorus.Messaging.Abstractions;
-using Chorus.Samples.RestApi.Handlers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Chorus.Samples.RestApi
+namespace Chorus.Samples.RestApi.Handlers
 {
     public class DemoEventHandler<TEvent> : IEventHandler<TEvent>
         where TEvent : IEvent

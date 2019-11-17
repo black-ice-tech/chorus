@@ -6,9 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Chorus.Specs.DistributedLog.InMemory
@@ -18,13 +15,12 @@ namespace Chorus.Specs.DistributedLog.InMemory
     {
         [Test]
         [TestCase(typeof(IDistributedLog))]
-        [TestCase(typeof(IEventHandler<MyTestEvent>))]
-        [TestCase(typeof(IHostedService))]
+        [TestCase(typeof(IStreamConsumer))]
         public void Should_be_able_to_add_all_required_in_memory_services(Type serviceType)
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddInMemoryDistributedLog(typeof(MyTestEvent), typeof(MyTestEventHandler));
+            services.AddInMemoryDistributedLog();
 
             var serviceProvider = services.BuildServiceProvider();
 

@@ -1,10 +1,9 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Chorus.DistributedLog.Abstractions;
 using Chorus.DistributedLog.Extensions;
+using Chorus.Samples.RestApi.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Chorus.Samples.RestApi.Controllers
 {
@@ -24,9 +23,15 @@ namespace Chorus.Samples.RestApi.Controllers
         }
 
         [HttpGet]
-        public async Task<int> GetCurrent()
+        public int GetCurrent()
         {
             return InMemoryNumberStore.CurrentNum;
+        }
+
+        [HttpGet("count100")]
+        public int GetCount()
+        {
+            return InMemoryNumberStore.NumbersOver100Count;
         }
 
         [HttpGet("add/{num}")]

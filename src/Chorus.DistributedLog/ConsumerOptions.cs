@@ -13,6 +13,7 @@ namespace Chorus.DistributedLog
         {
             private bool _stopConsumingAtEOF;
             private string _consumerGroupId;
+            private int _offset;
 
             public Builder StopConsumingAtEOF()
             {
@@ -26,12 +27,19 @@ namespace Chorus.DistributedLog
                 return this;
             }
 
+            public Builder FromOffset(int offset)
+            {
+                _offset = offset;
+                return this;
+            }
+
             public ConsumerOptions Build()
             {
                 return new ConsumerOptions
                 {
                     StopConsumingAtEOF = _stopConsumingAtEOF,
-                    ConsumerGroupId = _consumerGroupId
+                    ConsumerGroupId = _consumerGroupId,
+                    StartOffset = _offset
                 };
             }
         }

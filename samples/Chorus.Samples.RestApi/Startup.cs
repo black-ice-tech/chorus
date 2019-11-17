@@ -1,18 +1,14 @@
-using Chorus.CQRS;
-using Chorus.DistributedLog;
-using Chorus.DistributedLog.Abstractions;
+﻿using Chorus.CQRS;
 using Chorus.DistributedLog.InMemory.Extensions;
 using Chorus.Messaging;
 using Chorus.Messaging.Abstractions;
+using Chorus.Samples.RestApi.Appliers;
 using Chorus.Samples.RestApi.Handlers;
-using Chorus.Samples.RestApi.Projectors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace Chorus.Samples.RestApi
 {
@@ -30,28 +26,24 @@ namespace Chorus.Samples.RestApi
             services.AddControllers();
 
             services.AddInMemoryDistributedLog();
+
             services.AddHostedService<EventConsumer<NumberAdded>>();
             services.AddHostedService<EventConsumer<NumberMultiplied>>();
             services.AddHostedService<EventConsumer<NumberSubtracted>>();
 
-            services.AddHostedService<EventConsumer<PolicyStarted>>();
-            services.AddHostedService<EventConsumer<PolicyIssued>>();
-            services.AddHostedService<EventConsumer<PolicyEnded>>();
-            services.AddHostedService<EventConsumer<PolicyCancelled>>();
+            services.AddHostedService<EventProjector<NumberAdded>>();
+            services.AddHostedService<EventProjector<NumberMultiplied>>();
+            services.AddHostedService<EventProjector<NumberSubtracted>>();
 
             services.AddTransient(typeof(IEventHandler<>), typeof(DemoEventHandler<>));
-            //services.AddTransient<IEventHandler<NumberAdded>, NumberAddedHandler>();
-            //services.AddTransient<IEventHandler<NumberMultiplied>, NumberMultipliedHandler>();
-            //services.AddTransient<IEventHandler<NumberSubtracted>, NumberSubtractedHandler>();
 
-            services.AddTransient<IEventProjector<NumberAdded>, NumberInMemoryStoreProjector>();
-            services.AddTransient<IEventProjector<NumberMultiplied>, NumberInMemoryStoreProjector>();
-            services.AddTransient<IEventProjector<NumberSubtracted>, NumberInMemoryStoreProjector>();
+            services.AddTransient<IEventApplier<NumberAdded>, CurrentNumberInMemoryStoreApplier>();
+            services.AddTransient<IEventApplier<NumberMultiplied>, CurrentNumberInMemoryStoreApplier>();
+            services.AddTransient<IEventApplier<NumberSubtracted>, CurrentNumberInMemoryStoreApplier>();
 
-            services.AddTransient<IEventProjector<PolicyStarted>, PolicyInMemoryStoreProjector>();
-            services.AddTransient<IEventProjector<PolicyIssued>, PolicyInMemoryStoreProjector>();
-            services.AddTransient<IEventProjector<PolicyEnded>, PolicyInMemoryStoreProjector>();
-            services.AddTransient<IEventProjector<PolicyCancelled>, PolicyInMemoryStoreProjector>();
+            services.AddTransient<IEventApplier<NumberAdded>, CountAllNumbersOver100>();
+            services.AddTransient<IEventApplier<NumberMultiplied>, CountAllNumbersOver100>();
+            services.AddTransient<IEventApplier<NumberSubtracted>, CountAllNumbersOver100>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

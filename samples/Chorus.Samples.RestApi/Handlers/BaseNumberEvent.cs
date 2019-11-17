@@ -1,7 +1,7 @@
 ﻿using Chorus.CQRS;
 using System;
 
-namespace Chorus.Samples.RestApi
+namespace Chorus.Samples.RestApi.Handlers
 {
     public abstract class BaseNumberEvent : IEvent
     {

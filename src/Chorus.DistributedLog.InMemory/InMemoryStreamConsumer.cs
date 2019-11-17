@@ -1,7 +1,6 @@
 ﻿using Chorus.Core;
 using Chorus.DistributedLog.Abstractions;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Chorus.DistributedLog.InMemory
 {
@@ -17,13 +16,20 @@ namespace Chorus.DistributedLog.InMemory
 
         public IAsyncEnumerable<byte[]> ConsumeAsync(string streamName)
         {
-            return ConsumeAsync(streamName, new ConsumerOptions.Builder().Build());
+            return ConsumeAsync(streamName, null);
         }
 
         public async IAsyncEnumerable<byte[]> ConsumeAsync(string streamName, ConsumerOptions options)
         {
             streamName?.ThrowIfNull(nameof(streamName));
-            options?.ThrowIfNull(nameof(options));
+            var consumerOptions = new ConsumerOptions.Builder().Build();
+
+            if (options != null)
+            {
+                consumerOptions = options;
+            }
+
+            _currentOffset = consumerOptions.StartOffset;
 
             var keepConsuming = true;
 
@@ -36,7 +42,7 @@ namespace Chorus.DistributedLog.InMemory
                     yield return result;
                     _currentOffset++;
                 }
-                else if (options.StopConsumingAtEOF)
+                else if (consumerOptions.StopConsumingAtEOF)
                 {
                     keepConsuming = false;
                 }

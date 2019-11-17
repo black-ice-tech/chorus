@@ -1,8 +1,6 @@
 ﻿using Chorus.DistributedLog.Abstractions;
-using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Chorus.DistributedLog.InMemory

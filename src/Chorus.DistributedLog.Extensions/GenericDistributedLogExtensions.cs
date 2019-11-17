@@ -1,6 +1,5 @@
 ﻿using Chorus.DistributedLog.Abstractions;
 using Newtonsoft.Json;
-using System;
 using System.Text;
 using System.Threading.Tasks;
 
