@@ -6,6 +6,6 @@ namespace Chorus.DistributedLog.Abstractions
     {
         Task AppendAsync(string streamName, byte[] payload);
 
-        Task<byte[]> RetrieveEntry(string stream, int offset);
+        Task<byte[]> RetrieveEntryAsync(string stream, int offset);
     }
 }

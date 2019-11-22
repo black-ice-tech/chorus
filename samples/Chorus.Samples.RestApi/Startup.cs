@@ -1,5 +1,9 @@
 ﻿using Chorus.CQRS;
+using Chorus.DistributedLog;
+using Chorus.DistributedLog.Abstractions;
+using Chorus.DistributedLog.InMemory;
 using Chorus.DistributedLog.InMemory.Extensions;
+using Chorus.DistributedLog.TextFile;
 using Chorus.Messaging;
 using Chorus.Messaging.Abstractions;
 using Chorus.Samples.RestApi.Appliers;
@@ -25,7 +29,10 @@ namespace Chorus.Samples.RestApi
         {
             services.AddControllers();
 
-            services.AddInMemoryDistributedLog();
+//            services.AddInMemoryDistributedLog();
+            services.AddTransient<IStreamConsumer, InMemoryStreamConsumer>();
+            services.AddSingleton<ITopicNamingConvention, KebabCaseTopicNamingConvention>();
+            services.AddTransient<IDistributedLog, TextFileDistributedLog>();
 
             services.AddHostedService<EventConsumer<NumberAdded>>();
             services.AddHostedService<EventConsumer<NumberMultiplied>>();

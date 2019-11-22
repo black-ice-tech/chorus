@@ -16,7 +16,7 @@ namespace Chorus.DistributedLog.Extensions
 
         public static async Task<T> RetrieveEntry<T>(this IDistributedLog distributedLog, string streamName, int offset)
         {
-            var bytes = await distributedLog.RetrieveEntry(streamName, offset);
+            var bytes = await distributedLog.RetrieveEntryAsync(streamName, offset);
 
             var payload = Encoding.UTF8.GetString(bytes);
 

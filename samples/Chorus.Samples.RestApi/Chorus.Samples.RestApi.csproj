@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\src\Chorus.CQRS\Chorus.CQRS.csproj" />
     <ProjectReference Include="..\..\src\Chorus.DistributedLog.Extensions\Chorus.DistributedLog.Extensions.csproj" />
     <ProjectReference Include="..\..\src\Chorus.DistributedLog.InMemory\Chorus.DistributedLog.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Chorus.DistributedLog.TextFile\Chorus.DistributedLog.TextFile.csproj" />
     <ProjectReference Include="..\..\src\Chorus.Messaging\Chorus.Messaging.csproj" />
   </ItemGroup>
 

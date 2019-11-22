@@ -21,7 +21,7 @@ namespace Chorus.DistributedLog.InMemory
             return Task.CompletedTask;
         }
 
-        public Task<byte[]> RetrieveEntry(string stream, int offset)
+        public Task<byte[]> RetrieveEntryAsync(string stream, int offset)
         {
             if (!_streams.ContainsKey(stream))
             {

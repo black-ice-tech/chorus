@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chorus.Messaging", "src\Cho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chorus.DistributedLog.Extensions", "src\Chorus.DistributedLog.Extensions\Chorus.DistributedLog.Extensions.csproj", "{E74D5BB8-067C-4791-B6BD-8B4E5631916D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chorus.DistributedLog.TextFile", "src\Chorus.DistributedLog.TextFile\Chorus.DistributedLog.TextFile.csproj", "{08BC0276-E3A4-4CD6-94C3-56FC963983AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,18 @@ Global
 		{E74D5BB8-067C-4791-B6BD-8B4E5631916D}.Release|x64.Build.0 = Release|Any CPU
 		{E74D5BB8-067C-4791-B6BD-8B4E5631916D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E74D5BB8-067C-4791-B6BD-8B4E5631916D}.Release|x86.Build.0 = Release|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Debug|x64.Build.0 = Debug|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Release|x64.ActiveCfg = Release|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Release|x64.Build.0 = Release|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{08BC0276-E3A4-4CD6-94C3-56FC963983AA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

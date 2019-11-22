@@ -35,7 +35,7 @@ namespace Chorus.DistributedLog.InMemory
 
             while (keepConsuming)
             {
-                var result = await _log.RetrieveEntry(streamName, _currentOffset);
+                var result = await _log.RetrieveEntryAsync(streamName, _currentOffset);
 
                 if (result != null)
                 {
