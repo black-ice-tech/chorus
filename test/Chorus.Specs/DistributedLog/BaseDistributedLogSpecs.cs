@@ -2,7 +2,6 @@
 using System.Text;
 using System.Threading.Tasks;
 using Chorus.DistributedLog.Abstractions;
-using Chorus.DistributedLog.InMemory;
 using NUnit.Framework;
 
 namespace Chorus.Specs.DistributedLog
@@ -53,7 +52,7 @@ namespace Chorus.Specs.DistributedLog
         }
 
         [Test]
-        public async Task Should_get_argument_exception_if_offset_is_negative()
+        public void Should_get_argument_exception_if_offset_is_negative()
         {
             Assert.ThrowsAsync<ArgumentException>(() => _log.RetrieveEntryAsync(StreamName, -1));
         }

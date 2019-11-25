@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using Chorus.DistributedLog.InMemory;
+﻿using System.IO;
 using Chorus.DistributedLog.TextFile;
 using NUnit.Framework;
 

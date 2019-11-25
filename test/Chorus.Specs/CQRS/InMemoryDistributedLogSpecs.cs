@@ -23,7 +23,7 @@ namespace Chorus.Specs.CQRS
         [Test]
         public async Task Should_be_able_to_append_logs_to_a_stream_and_consume()
         {
-            var payloads = new string[] { "abc", "def", "ghi" };
+            var payloads = new[] { "abc", "def", "ghi" };
 
             await _log.AppendAsync("my-stream", Encoding.UTF8.GetBytes(payloads[0]));
             await _log.AppendAsync("my-stream", Encoding.UTF8.GetBytes(payloads[1]));

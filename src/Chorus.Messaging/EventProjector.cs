@@ -20,7 +20,6 @@ namespace Chorus.Messaging
         private readonly ITopicNamingConvention _topicNamingConvention;
         private readonly IEnumerable<IEventApplier<TEvent>> _eventAppliers;
         private readonly ILogger<EventProjector<TEvent>> _logger;
-        private ConsumerOptions _options;
 
         public EventProjector(
             IStreamConsumer streamConsumer,
@@ -47,7 +46,7 @@ namespace Chorus.Messaging
 
                 try
                 {
-                    await foreach (var msg in _streamConsumer.ConsumeAsync(topic, _options ?? new ConsumerOptions()).WithCancellation(stoppingToken))
+                    await foreach (var msg in _streamConsumer.ConsumeAsync(topic, new ConsumerOptions()).WithCancellation(stoppingToken))
                     {
                         var obj = JsonConvert.DeserializeObject<TEvent>(Encoding.UTF8.GetString(msg));
 

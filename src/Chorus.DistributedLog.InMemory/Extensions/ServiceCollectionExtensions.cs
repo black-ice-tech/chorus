@@ -1,12 +1,5 @@
-﻿using Chorus.CQRS;
-using Chorus.DistributedLog.Abstractions;
-using Chorus.Messaging;
-using Chorus.Messaging.Abstractions;
+﻿using Chorus.DistributedLog.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Chorus.DistributedLog.InMemory.Extensions
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Chorus.DistributedLog;
 using Chorus.DistributedLog.Abstractions;
@@ -45,7 +44,7 @@ namespace Chorus.Specs.DistributedLog
                 .StopConsumingAtEOF()
                 .Build();
 
-            await foreach (var msg in _consumer.ConsumeAsync("test-stream", options))
+            await foreach (var _ in _consumer.ConsumeAsync("test-stream", options))
             {
                 Assert.Fail("Stream is empty, should not consume anything");
             }

@@ -1,7 +1,7 @@
 using Chorus.Core;
 using NUnit.Framework;
 
-namespace Chorus.Specs
+namespace Chorus.Specs.Core
 {
     public class StringExtensionsSpecs
     {

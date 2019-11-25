@@ -19,7 +19,6 @@ namespace Chorus.Specs.Messaging
     public class EventConsumerSpecs
     {
         private readonly Mock<IStreamConsumer> _streamConsumer = new Mock<IStreamConsumer>();
-        private readonly Mock<IDistributedLog> _log = new Mock<IDistributedLog>();
         private EventConsumer<MyEvent> _eventConsumer;
 
         [SetUp]
@@ -61,14 +60,14 @@ namespace Chorus.Specs.Messaging
 
         private async IAsyncEnumerable<byte[]> GetFakeAsyncStream()
         {
-            var serializedEvent = JsonConvert.SerializeObject(new MyEvent {MyString = "abc"});
+            var serializedEvent = await Task.Run(() => JsonConvert.SerializeObject(new MyEvent()));
             yield return Encoding.UTF8.GetBytes(serializedEvent);
         }
     }
 
     public class MyEventHandler : IEventHandler<MyEvent>
     {
-        public static MyEvent HandledEvent = null;
+        public static MyEvent HandledEvent;
         public Predicate<MyEvent> OnlyHandleIf { get; } = null;
 
         public Task HandleAsync(MyEvent evt)

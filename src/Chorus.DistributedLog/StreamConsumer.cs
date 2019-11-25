@@ -7,7 +7,7 @@ namespace Chorus.DistributedLog
     public class StreamConsumer : IStreamConsumer
     {
         private readonly IDistributedLog _log;
-        private int _currentOffset = 0;
+        private int _currentOffset;
 
         public StreamConsumer(IDistributedLog log)
         {

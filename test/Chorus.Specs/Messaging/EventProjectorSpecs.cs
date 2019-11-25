@@ -7,13 +7,11 @@ using Chorus.CQRS;
 using Chorus.DistributedLog;
 using Chorus.DistributedLog.Abstractions;
 using Chorus.Messaging;
-using Chorus.Messaging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using ILogger = Castle.Core.Logging.ILogger;
 
 namespace Chorus.Specs.Messaging
 {
@@ -81,14 +79,14 @@ namespace Chorus.Specs.Messaging
 
         private async IAsyncEnumerable<byte[]> GetFakeAsyncStream()
         {
-            var serializedEvent = JsonConvert.SerializeObject(new MyEvent {MyString = "abc"});
+            var serializedEvent = await Task.Run(() => JsonConvert.SerializeObject(new MyEvent()));
             yield return Encoding.UTF8.GetBytes(serializedEvent);
         }
     }
 
     public class MyEventApplier : IEventApplier<MyEvent>
     {
-        public static MyEvent AppliedEvent = null;
+        public static MyEvent AppliedEvent;
         public Predicate<MyEvent> OnlyHandleIf { get; } = null;
 
         public Task ApplyAsync(MyEvent evt)

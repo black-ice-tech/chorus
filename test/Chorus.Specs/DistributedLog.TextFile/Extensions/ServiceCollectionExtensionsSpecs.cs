@@ -1,6 +1,5 @@
 ﻿using System;
 using Chorus.DistributedLog.Abstractions;
-using Chorus.DistributedLog.InMemory.Extensions;
 using Chorus.DistributedLog.TextFile;
 using Chorus.DistributedLog.TextFile.Extensions;
 using Microsoft.Extensions.DependencyInjection;

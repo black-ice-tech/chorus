@@ -1,11 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Chorus.CQRS;
 using Chorus.DistributedLog;
 using Chorus.DistributedLog.Abstractions;
-using Chorus.DistributedLog.InMemory;
-using Chorus.DistributedLog.InMemory.Extensions;
-using Chorus.DistributedLog.TextFile;
 using Chorus.DistributedLog.TextFile.Extensions;
 using Chorus.Messaging;
 using Chorus.Messaging.Abstractions;

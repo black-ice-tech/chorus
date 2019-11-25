@@ -40,8 +40,10 @@ namespace Chorus.Specs.Extensions
 
     public class NonDeserializableType
     {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         public string TestString { get; private set; }
 
+        // ReSharper disable once UnusedParameter.Local
         private NonDeserializableType(string abc)
         {
         }
