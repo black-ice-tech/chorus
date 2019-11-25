@@ -1,4 +1,5 @@
-﻿using Chorus.CQRS;
+﻿using System;
+using Chorus.CQRS;
 using Chorus.DistributedLog;
 using Chorus.DistributedLog.Abstractions;
 using Microsoft.Extensions.Hosting;
@@ -33,13 +34,7 @@ namespace Chorus.Messaging
             _logger = logger;
         }
 
-        public EventProjector<TEvent> WithOptions(ConsumerOptions options)
-        {
-            _options = options;
-            return this;
-        }
-
-        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Starting event projector for type {EventType}", typeof(TEvent).Name);
             var topic = _topicNamingConvention.GetTopicName<TEvent>();
@@ -48,20 +43,29 @@ namespace Chorus.Messaging
             {
                 // For some reason, without adding another "await" statement, the below async stream blocks
                 // the main thread and won't start up the application. This is a workaround
-                await Task.Delay(10);
+                await Task.Delay(10, stoppingToken);
 
-                await foreach (var msg in _streamConsumer.ConsumeAsync(topic, _options))
+                try
                 {
-                    var obj = JsonConvert.DeserializeObject<TEvent>(Encoding.UTF8.GetString(msg));
-
-                    var tasks = new List<Task>();
-
-                    foreach (IEventApplier<TEvent> applier in _eventAppliers)
+                    await foreach (var msg in _streamConsumer.ConsumeAsync(topic, _options ?? new ConsumerOptions()).WithCancellation(stoppingToken))
                     {
-                        tasks.Add(applier.ApplyAsync(obj));
-                    }
+                        var obj = JsonConvert.DeserializeObject<TEvent>(Encoding.UTF8.GetString(msg));
 
-                    await Task.WhenAll(tasks);
+                        var tasks = new List<Task>();
+
+                        foreach (IEventApplier<TEvent> applier in _eventAppliers)
+                        {
+                            tasks.Add(applier.ApplyAsync(obj));
+                        }
+
+                        await Task.WhenAll(tasks);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogCritical("Projector {ProjectorName} failed. Reason: {Exception}", GetType().FullName,
+                        e.Message);
+                    return;
                 }
             }
         }

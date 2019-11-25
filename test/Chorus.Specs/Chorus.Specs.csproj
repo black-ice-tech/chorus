@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.0.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
@@ -19,6 +20,7 @@
     <ProjectReference Include="..\..\src\Chorus.Core\Chorus.Core.csproj" />
     <ProjectReference Include="..\..\src\Chorus.DistributedLog.Extensions\Chorus.DistributedLog.Extensions.csproj" />
     <ProjectReference Include="..\..\src\Chorus.DistributedLog.InMemory\Chorus.DistributedLog.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Chorus.DistributedLog.TextFile\Chorus.DistributedLog.TextFile.csproj" />
     <ProjectReference Include="..\..\src\Chorus.DistributedLog\Chorus.DistributedLog.csproj" />
   </ItemGroup>
 

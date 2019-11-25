@@ -1,4 +1,5 @@
-﻿using Chorus.DistributedLog.Abstractions;
+﻿using System;
+using Chorus.DistributedLog.Abstractions;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,16 +22,24 @@ namespace Chorus.DistributedLog.InMemory
             return Task.CompletedTask;
         }
 
-        public Task<byte[]> RetrieveEntryAsync(string stream, int offset)
+        public Task<byte[]> RetrieveEntryAsync(string streamName, int offset)
         {
-            if (!_streams.ContainsKey(stream))
+            if (offset < 0)
             {
-                _streams[stream] = new List<byte[]>();
+                throw new ArgumentException("Offset must be positive", nameof(offset));
             }
 
-            if (!(offset >= 0 && offset < _streams[stream].Count)) return Task.FromResult<byte[]>(null);
+            if (!_streams.ContainsKey(streamName))
+            {
+                _streams[streamName] = new List<byte[]>();
+            }
 
-            return Task.FromResult(_streams[stream][offset]);
+            if (offset >= _streams[streamName].Count)
+            {
+                return Task.FromResult<byte[]>(null);
+            }
+
+            return Task.FromResult(_streams[streamName][offset]);
         }
     }
 }

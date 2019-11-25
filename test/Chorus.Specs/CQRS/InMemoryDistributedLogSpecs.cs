@@ -17,7 +17,7 @@ namespace Chorus.Specs.CQRS
         public void OneTimeSetup()
         {
             _log = new InMemoryDistributedLog();
-            _consumer = new InMemoryStreamConsumer(_log);
+            _consumer = new StreamConsumer(_log);
         }
 
         [Test]

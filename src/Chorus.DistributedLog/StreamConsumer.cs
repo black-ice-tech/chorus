@@ -1,15 +1,15 @@
-﻿using Chorus.Core;
+﻿using System.Collections.Generic;
+using Chorus.Core;
 using Chorus.DistributedLog.Abstractions;
-using System.Collections.Generic;
 
-namespace Chorus.DistributedLog.InMemory
+namespace Chorus.DistributedLog
 {
-    public class InMemoryStreamConsumer : IStreamConsumer
+    public class StreamConsumer : IStreamConsumer
     {
         private readonly IDistributedLog _log;
         private int _currentOffset = 0;
 
-        public InMemoryStreamConsumer(IDistributedLog log)
+        public StreamConsumer(IDistributedLog log)
         {
             _log = log;
         }

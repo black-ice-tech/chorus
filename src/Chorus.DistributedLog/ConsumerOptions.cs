@@ -8,7 +8,8 @@ namespace Chorus.DistributedLog
         public int StartOffset { get; private set; }
         public string ConsumerGroupId { get; private set; }
 
-        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Builder classes are well-suited to be nested")]
+        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification =
+            "Builder classes are well-suited to be nested")]
         public class Builder
         {
             private bool _stopConsumingAtEOF;
