@@ -68,7 +68,6 @@ namespace Chorus.Specs.Messaging
     public class MyEventHandler : IEventHandler<MyEvent>
     {
         public static MyEvent HandledEvent;
-        public Predicate<MyEvent> OnlyHandleIf { get; } = null;
 
         public Task HandleAsync(MyEvent evt)
         {

@@ -2,23 +2,21 @@
 using Chorus.Messaging.Abstractions;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
 
 namespace Chorus.Samples.RestApi.Handlers
 {
-    public class DemoEventHandler<TEvent> : IEventHandler<TEvent>
-        where TEvent : IEvent
+    public class NumberAddedHandler : IEventHandler<NumberAdded>
     {
-        private readonly ILogger<DemoEventHandler<TEvent>> _logger;
+        private readonly ILogger<NumberAddedHandler> _logger;
 
-        public DemoEventHandler(ILogger<DemoEventHandler<TEvent>> logger)
+        public NumberAddedHandler(ILogger<NumberAddedHandler> logger)
         {
             _logger = logger;
         }
 
-        public Predicate<TEvent> OnlyHandleIf => null;
-
-        public Task HandleAsync(TEvent evt)
+        public Task HandleAsync(NumberAdded evt)
         {
             _logger.LogInformation($"Handling event: {evt.Id}");
 

@@ -18,5 +18,4 @@ namespace Chorus.Samples.RestApi.Handlers
 
     public class NumberAdded : BaseNumberEvent { }
     public class NumberSubtracted : BaseNumberEvent { }
-    public class NumberMultiplied : BaseNumberEvent { }
 }

@@ -2,6 +2,7 @@
 using Chorus.CQRS;
 using Chorus.DistributedLog;
 using Chorus.DistributedLog.Abstractions;
+using Chorus.DistributedLog.Extensions;
 using Chorus.DistributedLog.TextFile.Extensions;
 using Chorus.Messaging;
 using Chorus.Messaging.Abstractions;
@@ -27,32 +28,12 @@ namespace Chorus.Samples.RestApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-//            services.AddInMemoryDistributedLog();
-            services.AddTransient<IStreamConsumer, StreamConsumer>();
-            services.AddSingleton<ITopicNamingConvention, KebabCaseTopicNamingConvention>();
-            services.AddTextFileDistributedLog(options =>
-            {
-                options.StreamDirectory = Directory.GetCurrentDirectory();
-            });
-
-            services.AddHostedService<EventConsumer<NumberAdded>>();
-            services.AddHostedService<EventConsumer<NumberMultiplied>>();
-            services.AddHostedService<EventConsumer<NumberSubtracted>>();
-
-            services.AddHostedService<EventProjector<NumberAdded>>();
-            services.AddHostedService<EventProjector<NumberMultiplied>>();
-            services.AddHostedService<EventProjector<NumberSubtracted>>();
-
-            services.AddTransient(typeof(IEventHandler<>), typeof(DemoEventHandler<>));
-
-            services.AddTransient<IEventApplier<NumberAdded>, CurrentNumberInMemoryStoreApplier>();
-            services.AddTransient<IEventApplier<NumberMultiplied>, CurrentNumberInMemoryStoreApplier>();
-            services.AddTransient<IEventApplier<NumberSubtracted>, CurrentNumberInMemoryStoreApplier>();
-
-            services.AddTransient<IEventApplier<NumberAdded>, CountAllNumbersOver100>();
-            services.AddTransient<IEventApplier<NumberMultiplied>, CountAllNumbersOver100>();
-            services.AddTransient<IEventApplier<NumberSubtracted>, CountAllNumbersOver100>();
+            services
+                .AddChorus(typeof(NumberAdded))
+                .AddTextFileDistributedLog(options =>
+                {
+                    options.StreamDirectory = Directory.GetCurrentDirectory();
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

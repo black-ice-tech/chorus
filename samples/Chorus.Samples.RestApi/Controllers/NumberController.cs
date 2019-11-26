@@ -49,13 +49,5 @@ namespace Chorus.Samples.RestApi.Controllers
 
             await _distributedLog.AppendAsync(_namingConvention.GetTopicName<NumberSubtracted>(), new NumberSubtracted { Num = num });
         }
-
-        [HttpGet("multiply/{num}")]
-        public async Task Multiply(int num)
-        {
-            _logger.LogInformation("Multiplying number...");
-
-            await _distributedLog.AppendAsync(_namingConvention.GetTopicName<NumberMultiplied>(), new NumberMultiplied { Num = num });
-        }
     }
 }

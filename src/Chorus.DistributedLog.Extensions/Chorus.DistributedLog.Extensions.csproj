@@ -5,11 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Chorus.CQRS\Chorus.CQRS.csproj" />
     <ProjectReference Include="..\Chorus.DistributedLog\Chorus.DistributedLog.csproj" />
+    <ProjectReference Include="..\Chorus.Messaging\Chorus.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

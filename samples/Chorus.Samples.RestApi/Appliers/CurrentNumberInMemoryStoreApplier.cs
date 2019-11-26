@@ -6,18 +6,11 @@ namespace Chorus.Samples.RestApi.Appliers
 {
     public class CurrentNumberInMemoryStoreApplier :
         IEventApplier<NumberAdded>,
-        IEventApplier<NumberMultiplied>,
         IEventApplier<NumberSubtracted>
     {
         public Task ApplyAsync(NumberAdded evt)
         {
             InMemoryNumberStore.CurrentNum += evt.Num;
-            return Task.CompletedTask;
-        }
-
-        public Task ApplyAsync(NumberMultiplied evt)
-        {
-            InMemoryNumberStore.CurrentNum *= evt.Num;
             return Task.CompletedTask;
         }
 
