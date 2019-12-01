@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Chorus.Messaging.Abstractions;
+using Chorus.CQRS;
 using Microsoft.Extensions.Logging;
 
 namespace Chorus.Samples.RestApi.Handlers

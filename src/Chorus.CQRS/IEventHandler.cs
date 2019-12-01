@@ -2,9 +2,9 @@
 
 namespace Chorus.CQRS
 {
-    public interface IEventApplier<in TEvent>
+    public interface IEventHandler<in TEvent>
         where TEvent : IEvent
     {
-        Task ApplyAsync(TEvent evt);
+        Task HandleAsync(TEvent evt);
     }
 }

@@ -5,7 +5,6 @@ using Chorus.DistributedLog;
 using Chorus.DistributedLog.Abstractions;
 using Chorus.DistributedLog.Extensions;
 using Chorus.DistributedLog.InMemory.Extensions;
-using Chorus.Messaging.Abstractions;
 using Chorus.Specs.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

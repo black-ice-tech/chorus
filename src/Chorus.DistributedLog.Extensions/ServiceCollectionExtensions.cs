@@ -5,7 +5,6 @@ using System.Reflection;
 using Chorus.CQRS;
 using Chorus.DistributedLog.Abstractions;
 using Chorus.Messaging;
-using Chorus.Messaging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Chorus.DistributedLog.Extensions

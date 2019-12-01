@@ -1,5 +1,4 @@
 ﻿using Chorus.CQRS;
-using Chorus.Messaging.Abstractions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics.Tracing;

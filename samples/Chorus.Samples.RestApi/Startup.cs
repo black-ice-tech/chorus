@@ -5,7 +5,6 @@ using Chorus.DistributedLog.Abstractions;
 using Chorus.DistributedLog.Extensions;
 using Chorus.DistributedLog.TextFile.Extensions;
 using Chorus.Messaging;
-using Chorus.Messaging.Abstractions;
 using Chorus.Samples.RestApi.Appliers;
 using Chorus.Samples.RestApi.Handlers;
 using Microsoft.AspNetCore.Builder;

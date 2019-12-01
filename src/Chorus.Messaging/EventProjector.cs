@@ -62,8 +62,8 @@ namespace Chorus.Messaging
                 }
                 catch (Exception e)
                 {
-                    _logger.LogCritical("Projector {ProjectorName} failed. Reason: {Exception}", GetType().FullName,
-                        e.Message);
+                    _logger.LogCritical("Projector {ProjectorName} failed. Reason: {Message}. Stack Trace: {StackTrace}",
+                        GetType().FullName, e.Message, e.StackTrace);
                     return;
                 }
             }

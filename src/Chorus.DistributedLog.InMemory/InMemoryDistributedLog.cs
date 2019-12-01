@@ -8,6 +8,7 @@ namespace Chorus.DistributedLog.InMemory
 {
     public class InMemoryDistributedLog : IDistributedLog
     {
+        private static readonly string OffsetMustBePositive = "Offset must be positive";
         private readonly ConcurrentDictionary<string, List<byte[]>> _streams = new ConcurrentDictionary<string, List<byte[]>>();
 
         public Task AppendAsync(string streamName, byte[] payload)
@@ -26,7 +27,7 @@ namespace Chorus.DistributedLog.InMemory
         {
             if (offset < 0)
             {
-                throw new ArgumentException("Offset must be positive", nameof(offset));
+                throw new ArgumentException(OffsetMustBePositive, nameof(offset));
             }
 
             if (!_streams.ContainsKey(streamName))

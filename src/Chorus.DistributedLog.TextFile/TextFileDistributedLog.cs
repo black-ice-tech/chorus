@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,8 +10,8 @@ namespace Chorus.DistributedLog.TextFile
 {
     public class TextFileDistributedLog : IDistributedLog
     {
+        private static readonly int MaxEntrySize = 1024 * 1000;
         private readonly TextFileDistributedLogOptions _options;
-        private readonly ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
 
         public TextFileDistributedLog(TextFileDistributedLogOptions options)
         {
@@ -22,23 +22,24 @@ namespace Chorus.DistributedLog.TextFile
         {
             var filePath = Path.Combine(_options.StreamDirectory, $"{streamName}.txt");
 
-            _readWriteLock.EnterWriteLock();
+            List<byte> payloadList = new List<byte>(MaxEntrySize);
+            byte[] sizeInBytes = BitConverter.GetBytes(payload.Length);
 
-            try
-            {
-                if (!File.Exists(filePath))
-                {
-                    await using var _ = File.Create(filePath);
-                }
+            payloadList.AddRange(sizeInBytes);
+            payloadList.AddRange(payload);
 
-                await using StreamWriter sw = File.AppendText(filePath);
-                sw.WriteLine(Encoding.UTF8.GetString(payload));
-                sw.Close();
-            }
-            finally
-            {
-                _readWriteLock.ExitWriteLock();
-            }
+            var lineToWrite = payloadList.ToArray();
+
+            Array.Resize(ref lineToWrite, MaxEntrySize);
+
+            await using var outStream =
+                new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+
+            outStream.Seek(0, SeekOrigin.End);
+
+            var blah = Encoding.UTF8.GetString(lineToWrite);
+            var length = lineToWrite.Length;
+            await outStream.WriteAsync(lineToWrite, 0, lineToWrite.Length);
         }
 
         public async Task<byte[]> RetrieveEntryAsync(string streamName, int offset)
@@ -50,25 +51,18 @@ namespace Chorus.DistributedLog.TextFile
 
             var filePath = Path.Combine(_options.StreamDirectory, $"{streamName}.txt");
 
-            string line = null;
+            await using var inStream =
+                new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
 
-            _readWriteLock.EnterReadLock();
+            var byteOffset = offset * MaxEntrySize;
+            inStream.Seek(byteOffset, SeekOrigin.Begin);
+            byte[] entryLengthBuffer = new byte[4];
+            await inStream.ReadAsync(entryLengthBuffer);
+            var entryLength = BitConverter.ToInt32(entryLengthBuffer);
+            byte[] buffer = new byte[entryLength];
+            await inStream.ReadAsync(buffer);
 
-            try
-            {
-                if (!File.Exists(filePath))
-                {
-                    await using var _ = File.Create(filePath);
-                }
-
-                line = File.ReadLines(filePath).Skip(offset).Take(1).FirstOrDefault();
-            }
-            finally
-            {
-                _readWriteLock.ExitReadLock();
-            }
-
-            return line is null ? null : Encoding.UTF8.GetBytes(line);
+            return buffer.Length > 0 ? buffer : null;
         }
     }
 }
