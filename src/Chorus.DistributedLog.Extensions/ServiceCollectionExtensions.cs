@@ -18,11 +18,21 @@ namespace Chorus.DistributedLog.Extensions
 
             var eventTypes = GetAllTypesImplementingInterface<IEvent>(markerTypes).ToList();
 
-            services.AddServicesAsTransient(typeof(IEventHandler<>), eventTypes, markerTypes);
-            services.AddServicesAsTransient(typeof(IEventApplier<>), eventTypes, markerTypes);
+            var numberOfRegisteredEventHandlers =
+                services.AddServicesAsTransient(typeof(IEventHandler<>), eventTypes, markerTypes);
+            var numberOfRegisteredEventAppliers =
+                services.AddServicesAsTransient(typeof(IEventApplier<>), eventTypes, markerTypes);
 
-            services.AddEventConsumers(eventTypes);
-            services.AddEventProjectors(eventTypes);
+            if (numberOfRegisteredEventHandlers > 0)
+            {
+                services.AddEventConsumers(eventTypes);
+            }
+
+            if (numberOfRegisteredEventAppliers > 0)
+            {
+                services.AddEventProjectors(eventTypes);
+            }
+
             return services;
         }
 
@@ -62,9 +72,10 @@ namespace Chorus.DistributedLog.Extensions
             }
         }
 
-        private static void AddServicesAsTransient(this IServiceCollection services, Type openGenericType,
+        private static int AddServicesAsTransient(this IServiceCollection services, Type openGenericType,
             IEnumerable<Type> eventTypes, params Type[] markerTypes)
         {
+            int numberOfRegisteredItems = 0;
             foreach (var eventType in eventTypes)
             {
                 var eventHandlerTypes = GetAllTypesImplementingOpenGenericType(eventType, openGenericType, markerTypes);
@@ -73,11 +84,15 @@ namespace Chorus.DistributedLog.Extensions
                 {
                     var interfaceType = openGenericType.MakeGenericType(eventType);
                     services.AddTransient(interfaceType, eventHandlerType);
+                    numberOfRegisteredItems++;
                 }
             }
+
+            return numberOfRegisteredItems;
         }
 
-        private static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type genericTypeParameter, Type openGenericType,
+        private static IEnumerable<Type> GetAllTypesImplementingOpenGenericType(Type genericTypeParameter,
+            Type openGenericType,
             Type[] markerTypes)
         {
             var genericType = openGenericType.MakeGenericType(genericTypeParameter);
